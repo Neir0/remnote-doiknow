@@ -1,0 +1,121 @@
+/* Add your plugin styles here. */
+body {
+        font-family: 'Open Sans', sans-serif;
+        background-color: #f8f8f8;
+}
+.quiz-container {
+        margin: 0 auto;
+        max-width: 400px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        padding: 20px;
+        box-sizing: border-box;
+}
+.quiz-container h1, .quiz-container h2 {
+        text-align: center;
+        margin-top: 0;
+}
+
+
+.quiz-container h1 {
+        font-size: 48px;
+        color: #2c3e50;
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #2c3e50, 0 0 70px #2c3e50, 0 0 80px #2c3e50, 0 0 100px #2c3e50, 0 0 150px #2c3e50;
+        transition: text-shadow 0.5s ease-out;
+}
+.quiz-container  h1:hover {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #2c3e50, 0 0 35px #2c3e50, 0 0 40px #2c3e50, 0 0 50px #2c3e50, 0 0 75px #2c3e50;
+}
+
+
+.quiz-container h1 {
+        font-weight: 700;
+        font-size: 36px;
+        color: #2c3e50;
+}
+.quiz-container h2 {
+        font-weight: 400;
+        font-size: 24px;
+        color: #34495e;
+        margin-bottom: 10px;
+}
+.quiz-container p {
+        margin: 0;
+        color: #555;
+        font-size: 18px;
+}
+.quiz-container label {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 16px;
+        color: #555;
+        transition: color 0.5s ease-out;
+        transition: font-size 0.2s ease-out;
+}
+
+.quiz-container .error {
+        color:red;
+}
+
+.quiz-container .top-block {
+        display:flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom:10px;
+        padding-bottom:5px;
+        border-bottom:1px solid black;
+}
+
+
+.quiz-container .top-block .score span.correct
+{
+        color:green;
+}
+
+.quiz-container .top-block .score span.incorrect
+{
+        color:red;
+}
+
+.quiz-container button.incorrect
+{
+        color:red !important;
+        text-decoration: line-through !important;
+        font-size: 16px !important;
+}
+
+.quiz-container button.correct
+{
+        color:green !important;
+        font-size: 16px !important;
+        font-weight:bold;
+}
+
+
+.quiz-container label:hover {
+        font-size: 16px;
+        color: steelblue;
+        cursor:pointer;
+
+}
+
+.quiz-container input[type="radio"] {
+        display: inline-block;
+        margin-right: 10px;
+}
+.quiz-container button[type="submit"] {
+        background-color: #2ecc71;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        font-size: 18px;
+        padding: 10px 20px;
+        margin-top: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+}
+.quiz-container button[type="submit"]:hover {
+        background-color: #27ae60;
+}
+
