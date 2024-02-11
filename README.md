@@ -2,7 +2,7 @@
 
 Test yourself on your knowledge base.
 
-![Demo](images/example1.png)
+![Demo](images/Example1.png)
 
 ## Usage
 
