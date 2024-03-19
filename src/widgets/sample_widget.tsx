@@ -1,7 +1,7 @@
 import { usePlugin, renderWidget, useTracker, Rem } from '@remnote/plugin-sdk';
 import {setegid} from 'process';
 import { useState } from "react";
-import { QuizService, getQuestionResponse, startTopicResponse } from './../services/quizService';
+import { QuizService, getQuestionResponse, startTopicResponse } from './../services/quizservice';
 import '../App.css'
 
 
@@ -9,6 +9,7 @@ export const SampleWidget = () => {
   const plugin = usePlugin();
 
   const doiknowURL = "https://doiknow.app/";
+  //const doiknowURL = "https://localhost:44430/";
 
   let quizService = new QuizService();
 
@@ -31,9 +32,10 @@ export const SampleWidget = () => {
                 {
                   let rem =  await plugin.focus.getFocusedRem() as any;
 
-                  if(rem!=currentRem)
+                  if(rem?._id!=currentRem?._id )
                   {
                           currentRem = rem;
+
 
                           if(currentRem)
                           {
@@ -51,6 +53,14 @@ export const SampleWidget = () => {
 
           updateRemNameFunc();
 
+
+
+
+  let startOver = async () => { 
+        setCurrentQuestion(undefined);
+        setScore({correct:0, incorrect:0});
+        
+  }
 
   let clickMeFunc = async () => { 
           let rem = currentRem;  
@@ -83,8 +93,16 @@ export const SampleWidget = () => {
         }
         else
         {
-                setCurrentQuestion(question);
-                setAnswers({});
+                if(question.choices)
+                {
+                        setCurrentQuestion(question);
+                        setAnswers({});
+                }
+                else
+                {
+                        setCurrentQuestion(undefined);
+                        setAnswers({});
+                }
         }
 
         setIsLoading(false);
@@ -93,8 +111,8 @@ export const SampleWidget = () => {
 
 
   let startTopicDoIKnow = async () => { 
-        let rem = currentRem;  // await plugin.focus.getFocusedRem();
-        // let remContent = await getRemContent(rem);
+        let rem = currentRem;  
+
         let remContent = await getRemContentRec(rem, 0);
 
         //ToDo fix it 
@@ -176,6 +194,12 @@ export const SampleWidget = () => {
         window.open(doiknowURL+'quiz/'+(currentQuestion as any).id, '_blank');
   }
 
+  let test = async () => {
+        let rem =await plugin.focus.getFocusedRem();
+        let remContent = await getRemContentRec(rem, 0);
+        alert(remContent);
+  }
+
 
   let choiceSelected = async (selectedChoice:any, index:number) => { 
 
@@ -233,7 +257,7 @@ export const SampleWidget = () => {
 
                                 <div>
                                         <button onClick={goToDoIKnow}>Go to doiknow.app</button>&nbsp;|&nbsp;
-                                        <button onClick={()=>{setCurrentQuestion(undefined)}}>Start over</button>
+                                        <button onClick={()=>{startOver()}}>Start over</button>
 
                                 </div>
 
@@ -248,14 +272,20 @@ export const SampleWidget = () => {
                { 
 
                (currentFocusedRemContent=="")?(
-                               <label>
-                                       Please select a rem you want to be tested by clicking(focusing) on it
-                               </label>):
+                               <div>
+                                       <label>
+                                               Please select a rem you want to be tested by clicking(focusing) on it
+                                       </label>
+                               </div>
+
+                               ):
+
 
                                 (<div>
                                         <button onClick={startTopicDoIKnow}>Test me on  "{ currentFocusedRemContent }" and all sub rems </button>
 
                                         <button onClick={startTopic}>Test me on "{ currentFocusedRemContent }" only</button>
+
                                 </div>)
 
                 }
@@ -283,38 +313,6 @@ export const SampleWidget = () => {
         </div>
   );
 
-
-  return (
-        
-                <div className="quiz-container">
-
-                        <div className="top-block">
-                                <a href="">go to doiknow.app</a>
-
-                                <div className="score">
-                                        <span className="correct">0</span>/<span className="incorrect">0</span>
-                                </div>
-                        </div>
-
-                        <form>
-                                <h2>What is the capital of France?</h2>
-                                <label>
-                                        Paris
-                                </label>
-                                <label>
-                                        Berlin
-                                </label>
-                                <label className="correct">
-                                        London
-                                </label>
-                                <label className="incorrect">
-                                        Moscow
-                                </label>
-                        </form>
-                </div>
-
-  );
-
 };
 
 renderWidget(SampleWidget);
@@ -324,17 +322,16 @@ renderWidget(SampleWidget);
 
 async function getRemContent(rem:Rem | undefined)
 {
-        let combinedText = rem?.text.toString();
-        return combinedText;
+        return getRemText(rem);
 }
 
 async function getRemContentRec(rem:Rem | undefined, depth:number | undefined)
 {
+        console.time(`getRemContentRec ${rem.text}`);
         depth = depth || 0;
-        let combinedText = (new Array(depth + 1).join(' ')) + ' ' + rem?.text.toString();
+        let combinedText = (new Array(depth + 1).join(' ')) + ' ' + await getRemText(rem);
 
         let childRems = await rem?.getChildrenRem();
-
 
         if(childRems && childRems.length)
         {
@@ -345,8 +342,25 @@ async function getRemContentRec(rem:Rem | undefined, depth:number | undefined)
                 }
         }
 
+        console.timeEnd(`getRemContentRec ${rem.text}`);
+
         return combinedText;
 }
+
+async function getRemText(rem:Rem)
+{
+      if(!rem || !rem?.text) return '';
+      if(typeof rem.text[0] == 'string')
+      {
+              return rem?.text.toString()+((rem?.backText)?(`: ${rem.backText.toString()}`) : '');
+      }
+      else
+      {
+              if(rem.text.length) return rem.text[0].text;
+              return '';
+      }
+}
+
 
 
 
