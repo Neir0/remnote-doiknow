@@ -5,7 +5,7 @@ import '../App.css';
 async function onActivate(plugin: ReactRNPlugin) {
 
   // Register a sidebar widget.
-  await plugin.app.registerWidget('DoIKnow_widget', WidgetLocation.RightSidebar, {
+  await plugin.app.registerWidget('sample_widget', WidgetLocation.RightSidebar, {
     widgetTabTitle: 'DoIknow',
     widgetTabIcon: 'https://doiknow.app/img/logoplugin.jpg',
     dimensions: { height: 'auto', width: '100%' },
